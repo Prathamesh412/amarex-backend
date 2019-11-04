@@ -86,7 +86,7 @@ router.get("/edit-page/:slug",function(req,res){
             console.log("There is an error in the edit page "+ err)
         }
         else{
-            res.render("admin/edit_page",{
+            res.render("admin/edit-page",{
                 title:page.title,
                 slug:page.slug,
                 content:page.content,
@@ -133,6 +133,14 @@ router.post("/edit-page/:slug",function(req,res){
         }
 
     });
+});
+
+router.get("/delete-page/:id",function(req,res){
+    Page.findByIdAndRemove(req.params.id,function(err){
+        if(err) console.log(err)
+
+        res.redirect('/admin/pages');
+    })
 });
 
 //Exports

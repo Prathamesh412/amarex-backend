@@ -40,13 +40,17 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     cookie: { secure: true }
-  }))
+  }));
+
+  mongoose.set('useFindAndModify', false);
 
 //set Routes
 const pages= require("./routes/pages");
 const adminpages= require("./routes/admin_pages.js");
+const admincategories= require("./routes/admin_categories.js");
 app.use("/",pages);
 app.use("/admin/pages",adminpages);
+app.use("/admin/categories",admincategories);
 
 //Start server
 var port = 3000;
