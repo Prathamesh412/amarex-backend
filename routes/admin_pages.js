@@ -14,7 +14,7 @@ router.get("/add-page",function(req,res){
     var slug = "";
     var content = "";
 
-    res.render("admin/add_page",{
+    res.render("admin/add-page",{
         title:title,
         slug:slug,
         content:content
@@ -34,7 +34,7 @@ router.post("/add-page",function(req,res){
 
     Page.findOne({slug:slug}, function(err,page){
         if(page){
-            res.render("admin/add_page",{
+            res.render("admin/add-page",{
                 title:title,
                 slug:slug,
                 content:content
@@ -111,7 +111,7 @@ router.post("/edit-page/:slug",function(req,res){
     Page.findOne({slug:slug, _id:{$ne:id}}, function(err,page){
         if(page){
             alert("page exists. Try again");
-            res.render("admin/add_page",{
+            res.render("admin/add-page",{
                 title:title,
                 slug:slug,
                 content:content

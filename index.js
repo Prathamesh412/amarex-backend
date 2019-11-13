@@ -52,10 +52,10 @@ app.use(session({
 const pages= require("./routes/pages");
 const adminpages= require("./routes/admin_pages.js");
 const admincategories= require("./routes/admin_categories.js");
-const admincategories= require("./routes/admin_products.js");
+const adminproducts= require("./routes/admin_products.js");
 app.use("/admin/pages",adminpages);
 app.use("/admin/categories",admincategories);
-app.use("/admin/categories",adminproducts);
+app.use("/admin/products",adminproducts);
 app.use("/",pages);
 
 //Start server
