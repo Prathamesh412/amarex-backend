@@ -4,7 +4,8 @@ const path = require('path');
 const mongoose = require("mongoose");
 const bodyParser = require ("body-parser");
 const session = require('express-session');
-const fileUpload= require("express-fileupload")
+const fileUpload= require("express-fileupload");
+var multer = require('multer');
 //const {check, validationResult} = require('express-validator');
 // var expressValidator = require('express-validator');
 
@@ -30,6 +31,7 @@ app.locals.errors= null;
 
 // Expree file upload middleware
 app.use(fileUpload());
+
 
 //Body Parser middleware
 // parse application/x-www-form-urlencoded

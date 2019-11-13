@@ -95,7 +95,6 @@ router.get('/edit-product/:id', function (req, res) {
     Category.find(function (err, categories) {
 
         Product.findById(req.params.id, function (err, p) {
-            console.log(p);
             if (err) {
                 console.log(err);
                 res.redirect('/admin/products');
@@ -127,12 +126,11 @@ router.get('/edit-product/:id', function (req, res) {
 });
 
 router.post("/edit-product/:id",function(req,res){
-
+    console.log(req.files);
     var image = typeof req.files.image !== "undefined" ? req.files.image.name : "";
     var title = req.body.title;
     var slug = title.replace(/\s+/g, '-').toLowerCase();
-    var desc = req.body.desc;
-    var price = req.body.price;
+    var description = req.body.description;
     var category = req.body.category;
     var pimage = req.body.pimage;
     var id = req.params.id;
@@ -158,7 +156,7 @@ router.post("/edit-product/:id",function(req,res){
                     product.save(function(err){
                         if(err) console.log(err)
 
-                        if (imageFile != "") {
+                        if (image != "") {
                             if (pimage != "") {
                                 fs.remove('public/product_images/' + id + '/' + pimage, function (err) {
                                     if (err)
@@ -167,7 +165,7 @@ router.post("/edit-product/:id",function(req,res){
                             }
 
                             var productImage = req.files.image;
-                            var path = 'public/product_images/' + id + '/' + imageFile;
+                            var path = 'public/product_images/' + id + '/' + image;
 
                             productImage.mv(path, function (err) {
                                 return console.log(err);
@@ -180,6 +178,52 @@ router.post("/edit-product/:id",function(req,res){
         }
     })
 });
+
+/*
+ * POST product gallery
+ */
+router.post('/product-gallery/:id', function (req, res) {
+
+    var productImage = req.files.file;
+    var id = req.params.id;
+    var path = 'public/product_images/' + id + '/gallery/' + req.files.file.name;
+    var thumbsPath = 'public/product_images/' + id + '/gallery/thumbs/' + req.files.file.name;
+
+    productImage.mv(path, function (err) {
+        if (err)
+            console.log(err);
+
+        resizeImg(fs.readFileSync(path), {width: 100, height: 100}).then(function (buf) {
+            fs.writeFileSync(thumbsPath, buf);
+        });
+    });
+    res.sendStatus(200);
+});
+
+/*
+ * GET delete image
+ */
+router.get('/delete-image/:image', function (req, res) {
+
+    var originalImage = 'public/product_images/' + req.query.id + '/gallery/' + req.params.image;
+    var thumbImage = 'public/product_images/' + req.query.id + '/gallery/thumbs/' + req.params.image;
+
+    fs.remove(originalImage, function (err) {
+        if (err) {
+            console.log(err);
+        } else {
+            fs.remove(thumbImage, function (err) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.redirect('/admin/products/edit-product/' + req.query.id);
+                }
+            });
+        }
+    });
+});
+
+
 
 
 // The below is the search functionality to be implemented in the front end
