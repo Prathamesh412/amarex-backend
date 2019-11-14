@@ -61,7 +61,7 @@ router.post("/add-product",function(req,res){
                 slug:slug
             })
             product.save(function(err){
-                if(err){console.log(err)}
+                if(err){console.log("The error while product save" + err)}
                 else{
                     mkdirp("public/product_images/"+ product._id,function(err){
                         return console.log(err)
@@ -72,6 +72,9 @@ router.post("/add-product",function(req,res){
                     mkdirp("public/product_images/"+ product._id + "/gallery/thumbs",function(err){
                         return console.log(err)
                     });
+                    // mkdirp("public/product_images/"+ product._id + "/gallery/recommendation",function(err){
+                    //     return console.log(err)
+                    // });
 
                     if (image != "") {
                         var productImage = req.files.image;
@@ -100,13 +103,16 @@ router.get('/edit-product/:id', function (req, res) {
                 res.redirect('/admin/products');
             } else {
                 var galleryDir = 'public/product_images/' + p._id + '/gallery';
+              //  var recommendationDir = 'public/product_images/' + p._id + '/recommendation';
                 var galleryImages = null;
+              //  var recommendationImages = null;
 
                 fs.readdir(galleryDir, function (err, files) {
                     if (err) {
                         console.log(err);
                     } else {
                         galleryImages = files;
+                        console.log("The gallery image is" + galleryImages)
 
                         res.render('admin/edit_product', {
                             title: p.title,
@@ -223,7 +229,59 @@ router.get('/delete-image/:image', function (req, res) {
     });
 });
 
+//Delete product
+router.get("/delete-product/:id",function(req,res){
 
+    var id = req.params.id;
+    var path = "public/product_images/" + id;
+
+    fs.remove(path, function(err){
+        if(err){
+            console.log("File removal error " + err)
+        }else{
+            Product.findByIdAndRemove(id, function(err){
+                if(err) return console.log("Eror while deleting product "+ err)
+            })
+           
+            res.redirect("/admin/products");
+        }
+    })
+})
+
+
+/*
+ * POST product recommendation
+ */
+// router.post('/product-recommendation/:id', function (req, res) {
+
+//     console.log(req.files);
+//     var productImage = req.files.file;
+//     var id = req.params.id;
+//     var path = 'public/product_images/' + id + '/gallery/recommendation/' + req.files.file.name;
+//     // var thumbsPath = 'public/product_images/' + id + '/recommendation/thumbs/' + req.files.file.name;
+
+//     //     resizeImg(fs.readFileSync(path), {width: 100, height: 100}).then(function (buf) {
+//     //         fs.writeFileSync(path, buf);
+//     //     });
+//     // res.sendStatus(200);
+// });
+
+/*
+ * GET delete image recommendation
+ */
+// router.get('/delete-recommendation/:image', function (req, res) {
+
+//     var originalImage = 'public/product_images/' + req.query.id + '/gallery/recommendation/' + req.params.image;
+//    // var thumbImage = 'public/product_images/' + req.query.id + '/recommendation/thumbs/' + req.params.image;
+
+//     fs.remove(originalImage, function (err) {
+//         if (err) {
+//             console.log(err);
+//         } else {
+//             res.redirect('/admin/products/edit-product/' + req.query.id);
+//         }
+//     });
+// });
 
 
 // The below is the search functionality to be implemented in the front end

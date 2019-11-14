@@ -56,7 +56,7 @@
 
 <ul class="gallery">
     <% galleryImages.forEach(function(image){ %>
-    <% if (image != "thumbs") { %>
+    <% if (image != "thumbs" && image != "recommendation") { %>
     <li>
         <img src="/product_images/<%= id %>/gallery/thumbs/<%= image %>" alt="">&nbsp;
         <a class="confirmDeletion" href="/admin/products/delete-image/<%= image %>?id=<%= id %>">delete</a>
@@ -73,7 +73,29 @@
     </div>
 </form>
 
+<!-- <hr>
+<h3 class="page-header">Recommendation</h3>
 
+<ul class="gallery">
+    <% galleryImages.forEach(function(image){ %>
+    <% if (image != "thumbs" && image != "recommendation" && image != "redshirt2.jpg" && image != "redshirt3.jpg" && image != "redshirt4.jpg" && image != "redshirt5.jpg") { %>
+    <li>
+        <img src="/product_images/<%= id %>/gallery/recommendation/<%= image %>" alt="">&nbsp;
+        <a class="confirmDeletion" href="/admin/products/delete-recommendation/<%= image %>?id=<%= id %>">delete</a>
+    </li>
+    <% } %>
+    <% }); %>
+</ul>
+
+<br><br>
+<form action="/admin/products/product-recommendation/<%= id %>" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm">
+    <div class="fallback">
+        <input type="file" name="recofile" multiple>
+        <input type="submit" value="Upload">
+    </div>
+</form> -->
+
+<br>
 <a href="/admin/products" class="btn btn-primary">Edit Done</a>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.1.1/basic.css"/>

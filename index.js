@@ -61,7 +61,8 @@ app.use("/admin/products",adminproducts);
 app.use("/",pages);
 
 //Start server
-var port = 3000;
-app.listen(port,function(){
+
+var server = app.listen(process.env.PORT || 3000, function () {
+    var port = server.address().port;
     console.log("Server has started on port "+ port)
-})
+});
