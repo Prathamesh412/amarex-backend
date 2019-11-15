@@ -26,11 +26,23 @@ app.set("view engine", "ejs");
 //Set public folder
 app.use(express.static(path.join(__dirname,"public")));
 
+app.use(fileUpload());
+
 //Set global variable for error display in pages
 app.locals.errors= null;
 
+//Get Page model
+var Category = require("./models/category");
+
+Category.find({},function(err, categories){
+    if(err){
+        console.log(err)
+    }else{
+        app.locals.categories= categories;
+    }
+})
+
 // Expree file upload middleware
-app.use(fileUpload());
 
 
 //Body Parser middleware
