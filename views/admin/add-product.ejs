@@ -15,6 +15,15 @@
         <label for="">Description</label>
         <textarea name="description" id="ta" class="form-control" cols="30" rows="10" placeholder="Description"><%= description %></textarea>
     </div>
+
+    <div class="form-group">
+        <label for="">Main Category</label>
+        <select name="mainCategory" class="form-control">
+            <% mainCategories.forEach(function(mcat){ %>
+                <option value="<%= mcat.slug %>"><%= mcat.title %></option>
+            <% }); %>
+        </select>
+    </div>
     
     <div class="form-group">
         <label for="">Category</label>

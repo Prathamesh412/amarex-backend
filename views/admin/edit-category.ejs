@@ -11,7 +11,20 @@
         <input type="text" class="form-control" name="title" value="<%= title %>" placeholder="Title">
     </div>
 
-    <button class="btn btn-default">Submit</button>
+    <div class="form-group">
+            <label for="">Main Category</label>
+            <select name="mainCategory" class="form-control">
+                <% mainCategories.forEach(function(cat){ %>
+                    <option value="<%= cat.slug %>"
+                    <% if (cat.slug == mainCategory) { %>
+                    selected="selected"
+                    <% } %>        
+                    ><%= cat.title %></option>  
+                <% }); %>
+            </select>
+    </div>
+
+    <button class="btn btn-primary">Submit</button>
 </form>
 
 <%- include('../layouts/adminfooter') %>

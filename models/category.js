@@ -1,13 +1,28 @@
 var mongoose = require("mongoose");
+const Search = require('./search');
 
-var CategorySchema = mongoose.Schema({
-    title:{
-        type:String,
-        required:true
-    },
+const Category = Search.discriminator('Category', new mongoose.Schema({
     slug:{
         type:String
+    },
+    mainCategory:{
+        type:String,
+        required:true
     }
-});
+  }),
+);
 
-var Category = module.exports = mongoose.model("Category",CategorySchema);
+// var CategorySchema = mongoose.Schema({
+//     _id:String,
+//     title:{
+//         type:String,
+//         required:true
+//     },
+//     slug:{
+//         type:String
+//     }
+// });
+
+// var Category = module.exports = mongoose.model("Category",CategorySchema);
+
+module.exports = mongoose.model('Category');

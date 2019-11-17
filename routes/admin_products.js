@@ -5,6 +5,8 @@ const fs = require("fs-extra");
 const resizeImg = require("resize-img");
 const Product = require("../models/product");
 const Category = require("../models/category");
+const MainCategory = require("../models/mainCategory");
+var Search = require("../models/search");
 
 router.get("/",function(req,res){
     var count;
@@ -25,13 +27,17 @@ router.get("/add-product",function(req,res){
 
     var title ="";
     var description ="";
-    
-    Category.find(function(err,categories){
-        res.render("admin/add-product",{
-            title:title,
-            description:description,
-            categories:categories
-        })
+  
+    MainCategory.find({},function(err,mainCategories){
+
+        Category.find(function(err,categories){
+            res.render("admin/add-product",{
+                title:title,
+                description:description,
+                categories:categories,
+                mainCategories:mainCategories
+            })
+        });
     });
 
 });
@@ -43,6 +49,7 @@ router.post("/add-product",function(req,res){
     var slug = req.body.title.replace(/\s+/g, "-").toLowerCase();
     var description = req.body.description;
     var category = req.body.category;
+    var mainCategory = req.body.mainCategory;
 
     Product.findOne({slug:slug},function(err,product){
         if(product){
@@ -50,7 +57,8 @@ router.post("/add-product",function(req,res){
                 title:title,
                 image:image,
                 description:description,
-                categories:categories
+                categories:categories,
+                mainCategories:mainCategories
             });
         }else{
             var product = new Product({
@@ -58,19 +66,20 @@ router.post("/add-product",function(req,res){
                 image:image,
                 description:description,
                 category:category,
-                slug:slug
+                slug:slug,
+                mainCategory:mainCategory
             })
             product.save(function(err){
                 if(err){console.log("The error while product save" + err)}
                 else{
                     mkdirp("public/product_images/"+ product._id,function(err){
-                        return console.log(err)
+                        return console.log("The error for product images "+ err)
                     });
                     mkdirp("public/product_images/"+ product._id + "/gallery",function(err){
-                        return console.log(err)
+                        return console.log("The error for product images gallery "+ err)
                     });
                     mkdirp("public/product_images/"+ product._id + "/gallery/thumbs",function(err){
-                        return console.log(err)
+                        return console.log("The error for product images thumbnail "+ err)
                     });
                     // mkdirp("public/product_images/"+ product._id + "/gallery/recommendation",function(err){
                     //     return console.log(err)
@@ -95,40 +104,45 @@ router.post("/add-product",function(req,res){
 // Edit product functionality
 router.get('/edit-product/:id', function (req, res) {
 
-    Category.find(function (err, categories) {
+    MainCategory.find(function(err,mainCategories){
+    
+        Category.find(function (err, categories) {
 
-        Product.findById(req.params.id, function (err, p) {
-            if (err) {
-                console.log(err);
-                res.redirect('/admin/products');
-            } else {
-                var galleryDir = 'public/product_images/' + p._id + '/gallery';
-              //  var recommendationDir = 'public/product_images/' + p._id + '/recommendation';
-                var galleryImages = null;
-              //  var recommendationImages = null;
+            Product.findById(req.params.id, function (err, p) {
+                if (err) {
+                    console.log(err);
+                    res.redirect('/admin/products');
+                } else {
+                    var galleryDir = 'public/product_images/' + p._id + '/gallery';
+                //  var recommendationDir = 'public/product_images/' + p._id + '/recommendation';
+                    var galleryImages = null;
+                //  var recommendationImages = null;
 
-                fs.readdir(galleryDir, function (err, files) {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        galleryImages = files;
-                        console.log("The gallery image is" + galleryImages)
+                    fs.readdir(galleryDir, function (err, files) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            galleryImages = files;
+                            console.log("The gallery image is" + galleryImages)
 
-                        res.render('admin/edit_product', {
-                            title: p.title,
-                            description: p.description,
-                            categories: categories,
-                            category: p.category.replace(/\s+/g, '-').toLowerCase(),
-                            image: p.image,
-                            galleryImages: galleryImages,
-                            id: p._id
-                        });
-                    }
-                });
-            }
+                            res.render('admin/edit_product', {
+                                title: p.title,
+                                description: p.description,
+                                categories: categories,
+                                category: p.category.replace(/\s+/g, '-').toLowerCase(),
+                                mainCategories: mainCategories,
+                                mainCategory: p.mainCategory.replace(/\s+/g, '-').toLowerCase(),
+                                image: p.image,
+                                galleryImages: galleryImages,
+                                id: p._id
+                            });
+                        }
+                    });
+                }
+            });
+
         });
-
-    });
+    })
 });
 
 router.post("/edit-product/:id",function(req,res){
@@ -138,6 +152,7 @@ router.post("/edit-product/:id",function(req,res){
     var slug = title.replace(/\s+/g, '-').toLowerCase();
     var description = req.body.description;
     var category = req.body.category;
+    var mainCategory = req.body.mainCategory
     var pimage = req.body.pimage;
     var id = req.params.id;
 
@@ -155,6 +170,7 @@ router.post("/edit-product/:id",function(req,res){
                     product.slug = slug;
                     product.description = description;
                     product.category = category;
+                    product.mainCategory = mainCategory;
                     if (image != "") {
                         product.image = image;
                     }
@@ -292,17 +308,31 @@ router.get("/search",(req,res)=>{
     Product.countDocuments(function(err,c){
         count=c;
     });
-    // console.log(searchVar)
-    Product.find({title: {'$regex': searchVar,'$options': 'i'}},function(err,products){
-       console.log("The products is " + products);
+    console.log(searchVar)
+    // Category.find({title: {'$regex': searchVar,'$options': 'i'}}).populate('product').exec(function(err,searchlist){
+    //    console.log("The products is " + searchlist);
+    //     if (err) {
+    //         return console.log("error: " + err);
+    //     }
+    //     res.render("admin/products",{
+    //         products:searchlist,
+    //         count:count
+    //     })
+    // })
+
+     Search.find({title: {'$regex': searchVar,'$options': 'i'}}).exec(function(err,searchlist){
+       console.log("The products is " + searchlist);
         if (err) {
             return console.log("error: " + err);
-          }
+        }
         res.render("admin/products",{
-            products:products,
+            products:searchlist,
             count:count
         })
     })
+
+
+
 });
 
 //Exports

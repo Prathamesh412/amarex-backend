@@ -64,12 +64,16 @@ app.use(session({
 
 //set Routes
 const pages= require("./routes/pages");
+const products = require("./routes/products")
 const adminpages= require("./routes/admin_pages.js");
 const admincategories= require("./routes/admin_categories.js");
 const adminproducts= require("./routes/admin_products.js");
+const adminmaincategories = require("./routes/admin_mainCategories")
 app.use("/admin/pages",adminpages);
 app.use("/admin/categories",admincategories);
+app.use("/admin/mainCategories",adminmaincategories);
 app.use("/admin/products",adminproducts);
+app.use("/products",products)
 app.use("/",pages);
 
 //Start server
