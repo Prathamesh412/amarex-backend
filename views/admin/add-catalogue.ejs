@@ -1,0 +1,8 @@
+<form action="/admin/catalogues/uploadfile" enctype="multipart/form-data" method="POST">
+    <div class="form-group">
+            <label for="">Name for file</label>
+            <input type="text" class="form-control" name="name" value="<%= title %>" placeholder="Name of File">
+    </div>
+    <input type="file" name="upfile" />
+    <input type="submit" value="Upload a file"/>
+</form>

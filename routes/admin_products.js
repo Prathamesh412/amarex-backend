@@ -44,7 +44,25 @@ router.get("/add-product",function(req,res){
 
 router.post("/add-product",function(req,res){
 
-    var image = req.files.image.name;
+    console.log(req.files)
+    var mainImage = req.files.mainImage.name;
+    if(typeof req.files.thumbImage1 !== "undefined"){
+    var thumbImage1 = req.files.thumbImage1.name;
+    }else{
+        var thumbImage1 ="";
+    }
+    if(typeof req.files.thumbImage2 !== "undefined"){
+        var thumbImage2 = req.files.thumbImage2.name;
+    }
+    else{
+        var thumbImage2 ="";
+    }
+    if(typeof req.files.thumbImage3 !== "undefined"){
+        var thumbImage3 = req.files.thumbImage3.name;
+    }else{
+        var thumbImage3 ="";
+    }
+    
     var title = req.body.title;
     var slug = req.body.title.replace(/\s+/g, "-").toLowerCase();
     var description = req.body.description;
@@ -55,7 +73,10 @@ router.post("/add-product",function(req,res){
         if(product){
             res.render("admin/add-product",{
                 title:title,
-                image:image,
+                mainImage:mainImage,
+                thumbImage1:thumbImage1,
+                thumbImage2:thumbImage2,
+                thumbImage3:thumbImage3,
                 description:description,
                 categories:categories,
                 mainCategories:mainCategories
@@ -63,7 +84,10 @@ router.post("/add-product",function(req,res){
         }else{
             var product = new Product({
                 title:title,
-                image:image,
+                mainImage:mainImage,
+                thumbImage1:thumbImage1,
+                thumbImage2:thumbImage2,
+                thumbImage3:thumbImage3,
                 description:description,
                 category:category,
                 slug:slug,
@@ -85,11 +109,38 @@ router.post("/add-product",function(req,res){
                     //     return console.log(err)
                     // });
 
-                    if (image != "") {
-                        var productImage = req.files.image;
-                        var path = 'public/product_images/' + product._id + '/' + image;
+                    if (mainImage != "") {
+                        var productImage1 = req.files.mainImage;
+                        var path = 'public/product_images/' + product._id + '/' + mainImage;
 
-                        productImage.mv(path, function (err) {
+                        productImage1.mv(path, function (err) {
+                            return console.log(err);
+                        });
+                    }
+
+                    if (thumbImage1 != "") {
+                        var productImage2 = req.files.thumbImage1;
+                        var path = 'public/product_images/' + product._id + '/' + thumbImage1;
+
+                        productImage2.mv(path, function (err) {
+                            return console.log(err);
+                        });
+                    }
+
+                    if (thumbImage2 != "") {
+                        var productImage3 = req.files.thumbImage2;
+                        var path = 'public/product_images/' + product._id + '/' + thumbImage2;
+
+                        productImage3.mv(path, function (err) {
+                            return console.log(err);
+                        });
+                    }
+
+                    if (thumbImage3 != "") {
+                        var productImage4 = req.files.thumbImage3;
+                        var path = 'public/product_images/' + product._id + '/' + thumbImage3;
+
+                        productImage4.mv(path, function (err) {
                             return console.log(err);
                         });
                     }
@@ -325,7 +376,7 @@ router.get("/search",(req,res)=>{
         if (err) {
             return console.log("error: " + err);
         }
-        res.render("admin/products",{
+        res.render("admin/search",{
             products:searchlist,
             count:count
         })

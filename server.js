@@ -10,7 +10,7 @@ var multer = require('multer');
 // var expressValidator = require('express-validator');
 
 //connect to database
-const uri = "mongodb://amarexadmin:Amarex%401234@ds241097.mlab.com:41097/amarex-backend-db";
+const uri = "mongodb://admin:aryan123@ds043168.mlab.com:43168/amarex-website";
 const db = mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true},function(err){
     if (err) console.log(err)
     console.log("Mongolab database connected")
@@ -42,8 +42,6 @@ Category.find({},function(err, categories){
     }
 })
 
-// Expree file upload middleware
-
 
 //Body Parser middleware
 // parse application/x-www-form-urlencoded
@@ -69,11 +67,15 @@ const adminpages= require("./routes/admin_pages.js");
 const admincategories= require("./routes/admin_categories.js");
 const adminproducts= require("./routes/admin_products.js");
 const adminmaincategories = require("./routes/admin_mainCategories")
+const admincatalogue = require("./routes/admin_catalogues")
+const slider1 = require("./routes/slider1")
 app.use("/admin/pages",adminpages);
 app.use("/admin/categories",admincategories);
 app.use("/admin/mainCategories",adminmaincategories);
 app.use("/admin/products",adminproducts);
-app.use("/products",products)
+app.use("/products",products);
+app.use("/admin/catalogues",admincatalogue);
+app.use("/admin/slider1",slider1);
 app.use("/",pages);
 
 //Start server

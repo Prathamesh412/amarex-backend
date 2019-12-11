@@ -1,0 +1,30 @@
+<%- include('../layouts/adminheader') %>
+
+<h2 class="page-title">Catalogue</h2>
+<a href="/admin/catalogues/add-catalogue" class="btn btn-primary">Add a new Catalogue</a>
+<br><br>
+
+
+
+<table class="table table-striped alignmiddle">
+
+    <thead>
+        <tr class="home">
+            <th>Catalogue name</th>
+            <th>Catalogue</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% catalogues.forEach(function(catalogues){ %>
+        <tr>
+            <td><%= catalogues.name %></td>
+            <td><%= catalogues.file %></td>
+            <td><a class="confirmDeletion" href="/admin/catalogues/delete-catalogue/<%= catalogues._id %>">Delete</a></td>
+        </tr>
+        <% }); %>
+    </tbody>
+</table>
+
+
+<%- include('../layouts/adminfooter') %>

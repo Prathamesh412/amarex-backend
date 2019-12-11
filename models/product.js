@@ -19,7 +19,16 @@ const Product = Search.discriminator('Product', new mongoose.Schema({
         type:String,
         required:true
     },
-    image:{
+    mainImage:{
+        type:String
+    },
+    thumbImage1:{
+        type:String
+    },
+    thumbImage2:{
+        type:String
+    },
+    thumbImage3:{
         type:String
     }
   }),

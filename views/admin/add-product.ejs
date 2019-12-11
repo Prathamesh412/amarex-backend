@@ -13,7 +13,7 @@
     
     <div class="form-group">
         <label for="">Description</label>
-        <textarea name="description" id="ta" class="form-control" cols="30" rows="10" placeholder="Description"><%= description %></textarea>
+        <textarea name="description" id="was-ta" class="form-control" cols="30" rows="10" placeholder="Description"><%= description %></textarea>
     </div>
 
     <div class="form-group">
@@ -35,11 +35,25 @@
     </div>
     
     <div class="form-group">
-        <label for="">Image</label>
-        <input type="file" class="form-control" name="image" id="img" accept="image/*">
+        <label for="">Main Image</label>
+        <input type="file" class="form-control" name="mainImage" id="img" accept="image/*">
         <img src="#" id="imgPreview" alt="">
     </div>
-    
+    <div class="form-group">
+        <label for="">Thumbnail Image 1</label>
+        <input type="file" class="form-control" name="thumbImage1" id="img" accept="image/*">
+        <img src="#" id="imgPreview" alt="">
+    </div>
+    <div class="form-group">
+        <label for="">Thumbnail Image 2</label>
+        <input type="file" class="form-control" name="thumbImage2" id="img" accept="image/*">
+        <img src="#" id="imgPreview" alt="">
+    </div>
+    <div class="form-group">
+        <label for="">Thumbnail Image 3</label>
+        <input type="file" class="form-control" name="thumbImage3" id="img" accept="image/*">
+        <img src="#" id="imgPreview" alt="">
+    </div>
     <button class="btn btn-primary">Submit</button>
 </form>
 
