@@ -7,6 +7,11 @@
 <form method="post" action="/admin/products/edit-product/<%= id %>" enctype="multipart/form-data">
     
     <div class="form-group">
+        <label for="">Product ID</label>
+        <input type="text" class="form-control" name="productID" value="<%= productID %>" placeholder="Enter Product ID" required>
+    </div>
+    
+    <div class="form-group">
         <label for="">Title</label>
         <input type="text" class="form-control" name="title" value="<%= title %>" placeholder="Title">
     </div>

@@ -6,7 +6,7 @@
     border: 1px dashed #ccc;
 }
 
-#imgPreview {
+#imgPreview, #imgPreview1, #imgPreview2, #imgPreview3{
     margin: 20px;
 }
 

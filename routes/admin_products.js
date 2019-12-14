@@ -27,6 +27,7 @@ router.get("/add-product",function(req,res){
 
     var title ="";
     var description ="";
+    var productID = "";
   
     MainCategory.find({},function(err,mainCategories){
 
@@ -35,7 +36,8 @@ router.get("/add-product",function(req,res){
                 title:title,
                 description:description,
                 categories:categories,
-                mainCategories:mainCategories
+                mainCategories:mainCategories,
+                productID:productID
             })
         });
     });
@@ -68,6 +70,7 @@ router.post("/add-product",function(req,res){
     var description = req.body.description;
     var category = req.body.category;
     var mainCategory = req.body.mainCategory;
+    var productID = req.body.productID
 
     Product.findOne({slug:slug},function(err,product){
         if(product){
@@ -79,7 +82,8 @@ router.post("/add-product",function(req,res){
                 thumbImage3:thumbImage3,
                 description:description,
                 categories:categories,
-                mainCategories:mainCategories
+                mainCategories:mainCategories,
+                productID:productID
             });
         }else{
             var product = new Product({
@@ -91,7 +95,8 @@ router.post("/add-product",function(req,res){
                 description:description,
                 category:category,
                 slug:slug,
-                mainCategory:mainCategory
+                mainCategory:mainCategory,
+                productID:productID
             })
             product.save(function(err){
                 if(err){console.log("The error while product save" + err)}
@@ -185,7 +190,8 @@ router.get('/edit-product/:id', function (req, res) {
                                 mainCategory: p.mainCategory.replace(/\s+/g, '-').toLowerCase(),
                                 image: p.image,
                                 galleryImages: galleryImages,
-                                id: p._id
+                                id: p._id,
+                                productID:p.productID
                             });
                         }
                     });
@@ -206,6 +212,7 @@ router.post("/edit-product/:id",function(req,res){
     var mainCategory = req.body.mainCategory
     var pimage = req.body.pimage;
     var id = req.params.id;
+    var productID = req.params.productID
 
     Product.findOne({slug: slug, _id: {'$ne': id}}, function (err, p) {
 
@@ -222,6 +229,7 @@ router.post("/edit-product/:id",function(req,res){
                     product.description = description;
                     product.category = category;
                     product.mainCategory = mainCategory;
+                    product.productID = productID;
                     if (image != "") {
                         product.image = image;
                     }

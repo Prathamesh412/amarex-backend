@@ -5,6 +5,9 @@ const Search = require('./search')
 var Schema = mongoose.Schema;
 
 const Product = Search.discriminator('Product', new mongoose.Schema({
+    productID:{
+        type:String
+    },
     slug:{
         type:String
     },

@@ -31,31 +31,22 @@ router.post("/add-category", function(req,res){
     var mainCategory =req.body.mainCategory;
     var slug = req.body.title.replace(/\s+/g, "-").toLowerCase();
 
-    Category.findOne({slug:slug},function(err,category){
-        if(category){
-            res.render("admin/add-category",{
-                title:title,
-                mainCategory:mainCategory
+        var category = new Category({
+            title:title,
+            slug:slug,
+            mainCategory:mainCategory
+        })
+        category.save(function(err){
+            if(err){console.log(err)}
+            Category.find(function (err, categories) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    req.app.locals.categories = categories;
+                }
             });
-        }else{
-            var category = new Category({
-                title:title,
-                slug:slug,
-                mainCategory:mainCategory
-            })
-            category.save(function(err){
-                if(err){console.log(err)}
-                Category.find(function (err, categories) {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        req.app.locals.categories = categories;
-                    }
-                });
-                res.redirect("/admin/categories");
-            })
-        }
-    });
+            res.redirect("/admin/categories");
+        })
 });
 
 router.get("/edit-category/:slug",function(req,res){

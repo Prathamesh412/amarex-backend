@@ -7,6 +7,11 @@
 <form method="post" action="/admin/products/add-product" enctype="multipart/form-data">
     
     <div class="form-group">
+        <label for="">Product ID</label>
+        <input type="text" class="form-control" name="productID" value="<%= productID %>" placeholder="Enter Product ID" required>
+    </div>
+    
+    <div class="form-group">
         <label for="">Title</label>
         <input type="text" class="form-control" name="title" value="<%= title %>" placeholder="Title" required>
     </div>
@@ -41,18 +46,18 @@
     </div>
     <div class="form-group">
         <label for="">Thumbnail Image 1</label>
-        <input type="file" class="form-control" name="thumbImage1" id="img" accept="image/*">
-        <img src="#" id="imgPreview" alt="">
+        <input type="file" class="form-control" name="thumbImage1" id="img1" accept="image/*">
+        <img src="#" id="imgPreview1" alt="">
     </div>
     <div class="form-group">
         <label for="">Thumbnail Image 2</label>
-        <input type="file" class="form-control" name="thumbImage2" id="img" accept="image/*">
-        <img src="#" id="imgPreview" alt="">
+        <input type="file" class="form-control" name="thumbImage2" id="img2" accept="image/*">
+        <img src="#" id="imgPreview2" alt="">
     </div>
     <div class="form-group">
         <label for="">Thumbnail Image 3</label>
-        <input type="file" class="form-control" name="thumbImage3" id="img" accept="image/*">
-        <img src="#" id="imgPreview" alt="">
+        <input type="file" class="form-control" name="thumbImage3" id="img3" accept="image/*">
+        <img src="#" id="imgPreview3" alt="">
     </div>
     <button class="btn btn-primary">Submit</button>
 </form>
@@ -60,11 +65,51 @@
 <script>
     
     function readURL(input) {
+        // First image
+        
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                console.log(e)
+                $("#imgPreview").attr('src', e.target.result).width(100).height(100);
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    function readURL1(input) {
+        // Second image
+        if (input.files && input.files[0]) {
+            var reader1 = new FileReader();
+            
+            reader1.onload = function(e) {
+                console.log(e)
+                $("#imgPreview1").attr('src', e.target.result).width(100).height(100);
+            }
+            
+            reader1.readAsDataURL(input.files[0]);
+        }
+    }
+    function readURL2(input) {
+        // Third image
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             
             reader.onload = function(e) {
-                $("#imgPreview").attr('src', e.target.result).width(100).height(100);
+                $("#imgPreview2").attr('src', e.target.result).width(100).height(100);
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function readURL3(input) {
+        // Fourth image
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function(e) {
+                $("#imgPreview3").attr('src', e.target.result).width(100).height(100);
             }
             
             reader.readAsDataURL(input.files[0]);
@@ -73,6 +118,15 @@
     
     $("#img").change(function() {
         readURL(this);
+    });
+    $("#img1").change(function() {
+        readURL1(this);
+    });
+    $("#img2").change(function() {
+        readURL2(this);
+    });
+    $("#img3").change(function() {
+        readURL3(this);
     });
     
 </script>
