@@ -23,6 +23,28 @@ router.get("/",function(req,res){
     });
 });
 
+router.get('/:category', function (req, res) {
+
+    var categorySlug = req.params.category;
+    Product.countDocuments(function(err,c){
+        count=c;
+    });
+
+    Category.findOne({slug: categorySlug}, function (err, c) {
+        Product.find({category: categorySlug}, function (err, products) {
+            if (err)
+                console.log(err);
+
+            res.render('admin/products', {
+                title: c.title,
+                products: products,
+                count:count
+            });
+        });
+    });
+
+});
+
 router.get("/add-product",function(req,res){
 
     var title ="";
@@ -179,7 +201,7 @@ router.get('/edit-product/:id', function (req, res) {
                             console.log(err);
                         } else {
                             galleryImages = files;
-                            console.log("The gallery image is" + galleryImages)
+                           // console.log("The gallery image is" + galleryImages)
 
                             res.render('admin/edit_product', {
                                 product:p,
@@ -205,7 +227,7 @@ router.get('/edit-product/:id', function (req, res) {
 
 router.post("/edit-product/:id",function(req,res){
     console.log(req.files);
-    var image = typeof req.files.image !== "undefined" ? req.files.image.name : "";
+    //var image = typeof req.files.product.mainImage !== "undefined" ? req.files.image.product.mainImage : "";
     var title = req.body.title;
     var slug = title.replace(/\s+/g, '-').toLowerCase();
     var description = req.body.description;
@@ -225,15 +247,16 @@ router.post("/edit-product/:id",function(req,res){
             Product.findById(id, function(err,product){
                 if(err) console.log(err)
                 else{
+                    console.log(product);
                     product.title = title;
                     product.slug = slug;
                     product.description = description;
                     product.category = category;
                     product.mainCategory = mainCategory;
                     product.productID = productID;
-                    if (image != "") {
-                        product.image = image;
-                    }
+                    // if (product.mainImage != "") {
+                    //     product.image = image;
+                    // }
 
                     product.save(function(err){
                         if(err) console.log(err)
@@ -242,7 +265,7 @@ router.post("/edit-product/:id",function(req,res){
                             if (pimage != "") {
                                 fs.remove('public/product_images/' + id + '/' + pimage, function (err) {
                                     if (err)
-                                        console.log(err);
+                                    console.log(err);
                                 });
                             }
 
