@@ -182,6 +182,7 @@ router.get('/edit-product/:id', function (req, res) {
                             console.log("The gallery image is" + galleryImages)
 
                             res.render('admin/edit_product', {
+                                product:p,
                                 title: p.title,
                                 description: p.description,
                                 categories: categories,
@@ -286,22 +287,34 @@ router.post('/product-gallery/:id', function (req, res) {
  */
 router.get('/delete-image/:image', function (req, res) {
 
-    var originalImage = 'public/product_images/' + req.query.id + '/gallery/' + req.params.image;
-    var thumbImage = 'public/product_images/' + req.query.id + '/gallery/thumbs/' + req.params.image;
+    var removeThumbnail1 = 'public/product_images/' + req.query.id + '/gallery/' + req.params.product.thumbImage1;
+    var removeThumbnail2 = 'public/product_images/' + req.query.id + '/gallery/' + req.params.product.thumbImage2;
+    var removeThumbnail3 = 'public/product_images/' + req.query.id + '/gallery/' + req.params.product.thumbImage3;
 
-    fs.remove(originalImage, function (err) {
+    fs.remove(removeThumbnail1, function (err) {
         if (err) {
             console.log(err);
         } else {
-            fs.remove(thumbImage, function (err) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    res.redirect('/admin/products/edit-product/' + req.query.id);
-                }
-            });
+            res.redirect('/admin/products/edit-product/' + req.query.id);
         }
     });
+
+    fs.remove(removeThumbnail2, function (err) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.redirect('/admin/products/edit-product/' + req.query.id);
+        }
+    });
+
+    fs.remove(removeThumbnail3, function (err) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.redirect('/admin/products/edit-product/' + req.query.id);
+        }
+    });
+
 });
 
 //Delete product
