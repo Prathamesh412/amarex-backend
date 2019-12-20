@@ -211,7 +211,10 @@ router.get('/edit-product/:id', function (req, res) {
                                 category: p.category.replace(/\s+/g, '-').toLowerCase(),
                                 mainCategories: mainCategories,
                                 mainCategory: p.mainCategory.replace(/\s+/g, '-').toLowerCase(),
-                                image: p.image,
+                                image: p.mainImage,
+                                thumbImage1 : p.thumbImage1,
+                                thumbImage2 : p.thumbImage2,
+                                thumbImage3: p.thumbImage3,
                                 galleryImages: galleryImages,
                                 id: p._id,
                                 productID:p.productID
@@ -227,15 +230,23 @@ router.get('/edit-product/:id', function (req, res) {
 
 router.post("/edit-product/:id",function(req,res){
     console.log(req.files);
-    //var image = typeof req.files.product.mainImage !== "undefined" ? req.files.image.product.mainImage : "";
+    console.log(req.body)
+    var mainImage = typeof req.files.mainImage !== "undefined" ? req.files.mainImage : "";
+    var thumbImage1 = typeof req.files.thumbImage1 !== "undefined" ? req.files.mainImage : "";
+    var thumbImage2 = typeof req.files.thumbImage2 !== "undefined" ? req.files.thumbImage2 : "";
+    var thumbImage3 = typeof req.files.thumbImage3 !== "undefined" ? req.files.thumbImage3 : "";
     var title = req.body.title;
     var slug = title.replace(/\s+/g, '-').toLowerCase();
     var description = req.body.description;
     var category = req.body.category;
     var mainCategory = req.body.mainCategory
-    var pimage = req.body.pimage;
+    var pimage = req.body.image;
+    var pimage1 = req.body.pimage1;
+    var pimage2 = req.body.pimage2;
+    var pimage3 = req.body.pimage3;
     var id = req.params.id;
-    var productID = req.params.productID
+    var productID = req.params.productID;
+    
 
     Product.findOne({slug: slug, _id: {'$ne': id}}, function (err, p) {
 
@@ -247,21 +258,33 @@ router.post("/edit-product/:id",function(req,res){
             Product.findById(id, function(err,product){
                 if(err) console.log(err)
                 else{
-                    console.log(product);
+                   // console.log(product);
+                    product.productID= productID;
                     product.title = title;
                     product.slug = slug;
                     product.description = description;
                     product.category = category;
                     product.mainCategory = mainCategory;
                     product.productID = productID;
-                    // if (product.mainImage != "") {
-                    //     product.image = image;
-                    // }
+                    if (product.mainImage != "") {
+                        product.mainImage = mainImage;
+                    }
+                    if (product.thumbImage1 != "") {
+                        product.thumbImage1 = thumbImage1;
+                    }
+                    if (product.thumbImage2 != "") {
+                        product.thumbImage2 = thumbImage2;
+                    }
+                    if (product.thumbImage3 != "") {
+                        product.thumbImage3 = thumbImage3;
+                    }
+                    
 
                     product.save(function(err){
                         if(err) console.log(err)
 
-                        if (image != "") {
+                        //Main image edit
+                        if (mainImage != "") {
                             if (pimage != "") {
                                 fs.remove('public/product_images/' + id + '/' + pimage, function (err) {
                                     if (err)
@@ -269,14 +292,68 @@ router.post("/edit-product/:id",function(req,res){
                                 });
                             }
 
-                            var productImage = req.files.image;
-                            var path = 'public/product_images/' + id + '/' + image;
+                            var productImage = req.files.mainImage;
+                            var path = 'public/product_images/' + id + '/' + mainImage;
 
                             productImage.mv(path, function (err) {
                                 return console.log(err);
                             });
                         }
-                        res.redirect('/admin/products/edit-product/' + id);
+
+                        // Thumbnail image 1
+                        if (thumbImage1 != "") {
+                            if (pimage1 != "") {
+                                fs.remove('public/product_images/' + id + '/' + thumbImage1, function (err) {
+                                    if (err)
+                                    console.log(err);
+                                });
+                            }
+
+                            var productImage1 = req.files.thumbImage1;
+                            var path1 = 'public/product_images/' + id + '/' + thumbImage1;
+
+                            productImage1.mv(path1, function (err) {
+                                return console.log(err);
+                            });
+                        }
+
+                        //Thumbnail image 2
+                        if (thumbImage2 != "") {
+                            if (pimage2 != "") {
+                                fs.remove('public/product_images/' + id + '/' + thumbImage2, function (err) {
+                                    if (err)
+                                    console.log(err);
+                                });
+                            }
+
+                            var productImage2 = req.files.thumbImage2;
+                            var path2 = 'public/product_images/' + id + '/' + thumbImage2;
+
+                            productImage2.mv(path2, function (err) {
+                                return console.log(err);
+                            });
+                        }
+
+                        //Thumbnail images 3
+
+                        if (thumbImage3 != "") {
+                            if (pimage3 != "") {
+                                fs.remove('public/product_images/' + id + '/' + thumbImage3, function (err) {
+                                    if (err)
+                                    console.log(err);
+                                });
+                            }
+
+                            var productImage3 = req.files.thumbImage3;
+                            var path3 = 'public/product_images/' + id + '/' + thumbImage3;
+
+                            productImage3.mv(path3, function (err) {
+                                return console.log(err);
+                            });
+                        }
+                        
+                       // res.redirect('/admin/products/edit-product/' + id);
+                       res.redirect("/admin/products");
                     });
                 }           
             })

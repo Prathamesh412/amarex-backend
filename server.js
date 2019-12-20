@@ -69,6 +69,9 @@ const adminproducts= require("./routes/admin_products.js");
 const adminmaincategories = require("./routes/admin_mainCategories")
 const admincatalogue = require("./routes/admin_catalogues")
 const slider1 = require("./routes/slider1")
+const slider2 = require("./routes/slider2")
+const slider3 = require("./routes/slider3")
+const slider4 = require("./routes/slider4")
 app.use("/admin/pages",adminpages);
 app.use("/admin/categories",admincategories);
 app.use("/admin/mainCategories",adminmaincategories);
@@ -76,6 +79,9 @@ app.use("/admin/products",adminproducts);
 app.use("/products",products);
 app.use("/admin/catalogues",admincatalogue);
 app.use("/admin/slider1",slider1);
+app.use("/admin/slider2",slider2);
+app.use("/admin/slider3",slider3);
+app.use("/admin/slider4",slider4);
 app.use("/",pages);
 
 //Start server

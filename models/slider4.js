@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 // Page Schema
-var Slider1Schema = mongoose.Schema({
+var Slider4Schema = mongoose.Schema({
    
     category: {
         type: String,
@@ -12,4 +12,4 @@ var Slider1Schema = mongoose.Schema({
     }
 });
 
-var Slider1 = module.exports = mongoose.model('Slider1', Slider1Schema);
+var Slider4 = module.exports = mongoose.model('Slider4', Slider4Schema);
