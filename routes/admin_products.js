@@ -202,8 +202,9 @@ router.get('/edit-product/:id', function (req, res) {
                         } else {
                             galleryImages = files;
                            // console.log("The gallery image is" + galleryImages)
-
+                           //console.log(p);
                             res.render('admin/edit_product', {
+                                
                                 product:p,
                                 title: p.title,
                                 description: p.description,
@@ -211,7 +212,7 @@ router.get('/edit-product/:id', function (req, res) {
                                 category: p.category.replace(/\s+/g, '-').toLowerCase(),
                                 mainCategories: mainCategories,
                                 mainCategory: p.mainCategory.replace(/\s+/g, '-').toLowerCase(),
-                                image: p.mainImage,
+                                mainImage: p.mainImage,
                                 thumbImage1 : p.thumbImage1,
                                 thumbImage2 : p.thumbImage2,
                                 thumbImage3: p.thumbImage3,
@@ -258,7 +259,7 @@ router.post("/edit-product/:id",function(req,res){
             Product.findById(id, function(err,product){
                 if(err) console.log(err)
                 else{
-                   // console.log(product);
+                    console.log(product);
                     product.productID= productID;
                     product.title = title;
                     product.slug = slug;
@@ -387,11 +388,14 @@ router.post('/product-gallery/:id', function (req, res) {
  */
 router.get('/delete-image/:image', function (req, res) {
 
-    var removeThumbnail1 = 'public/product_images/' + req.query.id + '/gallery/' + req.params.product.thumbImage1;
-    var removeThumbnail2 = 'public/product_images/' + req.query.id + '/gallery/' + req.params.product.thumbImage2;
-    var removeThumbnail3 = 'public/product_images/' + req.query.id + '/gallery/' + req.params.product.thumbImage3;
+    console.log(req.query)
+    console.log(req.params.image)
 
-    fs.remove(removeThumbnail1, function (err) {
+    var removeThumbnail = 'public/product_images/' + req.query.id + '/' + req.params.image;
+    // var removeThumbnail2 = 'public/product_images/' + req.query.id + '/gallery/' + req.params.product.thumbImage2;
+    // var removeThumbnail3 = 'public/product_images/' + req.query.id + '/gallery/' + req.params.product.thumbImage3;
+
+    fs.unlink(removeThumbnail, function (err) {
         if (err) {
             console.log(err);
         } else {
@@ -399,21 +403,21 @@ router.get('/delete-image/:image', function (req, res) {
         }
     });
 
-    fs.remove(removeThumbnail2, function (err) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.redirect('/admin/products/edit-product/' + req.query.id);
-        }
-    });
+    // fs.remove(removeThumbnail2, function (err) {
+    //     if (err) {
+    //         console.log(err);
+    //     } else {
+    //         res.redirect('/admin/products/edit-product/' + req.query.id);
+    //     }
+    // });
 
-    fs.remove(removeThumbnail3, function (err) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.redirect('/admin/products/edit-product/' + req.query.id);
-        }
-    });
+    // fs.remove(removeThumbnail3, function (err) {
+    //     if (err) {
+    //         console.log(err);
+    //     } else {
+    //         res.redirect('/admin/products/edit-product/' + req.query.id);
+    //     }
+    // });
 
 });
 
