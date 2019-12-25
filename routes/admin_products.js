@@ -23,28 +23,6 @@ router.get("/",function(req,res){
     });
 });
 
-router.get('/:category', function (req, res) {
-
-    var categorySlug = req.params.category;
-    Product.countDocuments(function(err,c){
-        count=c;
-    });
-
-    Category.findOne({slug: categorySlug}, function (err, c) {
-        Product.find({category: categorySlug}, function (err, products) {
-            if (err)
-                console.log(err);
-
-            res.render('admin/products', {
-                title: c.title,
-                products: products,
-                count:count
-            });
-        });
-    });
-
-});
-
 router.get("/add-product",function(req,res){
 
     var title ="";
@@ -230,8 +208,9 @@ router.get('/edit-product/:id', function (req, res) {
 });
 
 router.post("/edit-product/:id",function(req,res){
-    console.log(req.files);
-    console.log(req.body)
+    //console.log(req.files);
+    console.log(req.body);
+    
     var mainImage = typeof req.files.mainImage !== "undefined" ? req.files.mainImage : "";
     var thumbImage1 = typeof req.files.thumbImage1 !== "undefined" ? req.files.mainImage : "";
     var thumbImage2 = typeof req.files.thumbImage2 !== "undefined" ? req.files.thumbImage2 : "";
@@ -506,8 +485,27 @@ router.get("/search",(req,res)=>{
             count:count
         })
     })
+});
 
+router.get('/:category', function (req, res) {
 
+    var categorySlug = req.params.category;
+    Product.countDocuments(function(err,c){
+        count=c;
+    });
+
+    Category.findOne({slug: categorySlug}, function (err, c) {
+        Product.find({category: categorySlug}, function (err, products) {
+            if (err)
+                console.log(err);
+
+            res.render('admin/products', {
+                title: c.title,
+                products: products,
+                count:count
+            });
+        });
+    });
 
 });
 

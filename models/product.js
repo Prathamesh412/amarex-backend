@@ -34,7 +34,7 @@ const Product = Search.discriminator('Product', new mongoose.Schema({
     thumbImage3:{
         type:String
     }
-  }),
+  })
 );
 
 // var ProductSchema = mongoose.Schema({
