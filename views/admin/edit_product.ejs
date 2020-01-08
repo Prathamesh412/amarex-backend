@@ -72,13 +72,13 @@
             <img id="noimage" src="/images/apples1.jpg" alt="">
             <% } else {%>
             <img id="noimage" src="/product_images/<%= id %>/<%= product.thumbImage1 %>" alt="">
-            <a class="confirmDeletion" href="/admin/products/delete-image/<%= product.thumbImage1 %>?id=<%= id %>">delete</a>
+            <a class="confirmDeletion" href="/admin/products/delete-image/<%= product.thumbImage1 %>?id=<%= id %>&name=thumb1">delete</a>
             <% } %>
         </p>
     </div>
     
     <div class="form-group">
-        <label for="">Upload new Thumnail Image</label>
+        <label for="">Upload new Thumbnail Image</label>
         <input type="file" class="form-control" name="thumbImage1" id="img1" accept="image/*">
         <img src="#" id="imgPreview1" alt="">
     </div>
@@ -90,7 +90,7 @@
             <img id="noimage" src="/images/apples1.jpg" alt="">
             <% } else {%>
             <img id="noimage" src="/product_images/<%= id %>/<%= product.thumbImage2 %>" alt="">
-            <a class="confirmDeletion" href="/admin/products/delete-image/<%= product.thumbImage2 %>?id=<%= id %>">delete</a>
+            <a class="confirmDeletion" href="/admin/products/delete-image/<%= product.thumbImage2 %>?id=<%= id %>&name=thumb2">delete</a>
             <% } %>
         </p>
     </div>
@@ -108,7 +108,7 @@
             <img id="noimage" src="/images/apples1.jpg" alt="">
             <% } else {%>
             <img id="noimage" src="/product_images/<%= id %>/<%= product.thumbImage3 %>" alt="">
-            <a class="confirmDeletion" href="/admin/products/delete-image/<%= product.thumbImage3 %>?id=<%= id %>">delete</a>
+            <a class="confirmDeletion" href="/admin/products/delete-image/<%= product.thumbImage3 %>?id=<%= id %>&name=thumb3">delete</a>
             <% } %>
         </p>
     </div>

@@ -82,7 +82,7 @@ app.use("/admin/slider1",slider1);
 app.use("/admin/slider2",slider2);
 app.use("/admin/slider3",slider3);
 app.use("/admin/slider4",slider4);
-app.use("/",pages);
+app.use("/",adminproducts);
 
 //Start server
 

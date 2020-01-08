@@ -208,11 +208,11 @@ router.get('/edit-product/:id', function (req, res) {
 });
 
 router.post("/edit-product/:id",function(req,res){
-    //console.log(req.files);
-    console.log(req.body);
+    console.log("The console files are " + req.files);
+    console.log("The console body are " + req.body);
     
     var mainImage = typeof req.files.mainImage !== "undefined" ? req.files.mainImage : "";
-    var thumbImage1 = typeof req.files.thumbImage1 !== "undefined" ? req.files.mainImage : "";
+    var thumbImage1 = typeof req.files.thumbImage1 !== "undefined" ? req.files.thumbImage1 : "";
     var thumbImage2 = typeof req.files.thumbImage2 !== "undefined" ? req.files.thumbImage2 : "";
     var thumbImage3 = typeof req.files.thumbImage3 !== "undefined" ? req.files.thumbImage3 : "";
     var title = req.body.title;
@@ -367,8 +367,28 @@ router.post('/product-gallery/:id', function (req, res) {
  */
 router.get('/delete-image/:image', function (req, res) {
 
-    console.log(req.query)
-    console.log(req.params.image)
+    var id= req.query.id;
+    var thumbname = req.query.name;
+    var deletedImage = req.params.image;
+
+    if(thumbname=="thumb2"){
+        Product.findById(id,function(err,product){
+            product.thumbImage2 = "";
+            product.save();
+        });
+    }else if(thumbname=="thumb1"){
+        Product.findById(id,function(err,product){
+            product.thumbImage1 = "";
+            product.save();
+        });
+    }else if(thumbname=="thumb3"){
+        Product.findById(id,function(err,product){
+            product.thumbImage3 = "";
+            product.save();
+        });
+    }else{
+        console.log("no Thumbnail image to be deleted")
+    }
 
     var removeThumbnail = 'public/product_images/' + req.query.id + '/' + req.params.image;
     // var removeThumbnail2 = 'public/product_images/' + req.query.id + '/gallery/' + req.params.product.thumbImage2;
@@ -381,6 +401,8 @@ router.get('/delete-image/:image', function (req, res) {
             res.redirect('/admin/products/edit-product/' + req.query.id);
         }
     });
+
+
 
     // fs.remove(removeThumbnail2, function (err) {
     //     if (err) {
