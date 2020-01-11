@@ -325,6 +325,8 @@ router.post("/edit-product/:id",function(req,res){
                             console.log("here 3")
                         }
                         else{
+                            console.log(thumbImage2)
+                            console.log(product.thumbImage2)
                             if (pimage2 != "") {
                                 fs.remove('public/product_images/' + id + '/' + thumbImage2, function (err) {
                                     if (err)
