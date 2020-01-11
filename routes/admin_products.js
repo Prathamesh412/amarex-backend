@@ -208,14 +208,15 @@ router.get('/edit-product/:id', function (req, res) {
 });
 
 router.post("/edit-product/:id",function(req,res){
-    console.log("The console files are " + req.files);
-    console.log("The console body are " + req.body);
+    console.log("The console files are " + JSON.stringify(req.files.thumbImage2.name));
+    console.log("The console files are " + JSON.stringify(req.files.mainImage));
+    console.log("The console body are " + JSON.stringify(req.body));
     
-    var mainImage = typeof req.files.mainImage !== "undefined" ? req.files.mainImage : "";
-    var thumbImage1 = typeof req.files.thumbImage1 !== "undefined" ? req.files.thumbImage1 : "";
-    var thumbImage2 = typeof req.files.thumbImage2 !== "undefined" ? req.files.thumbImage2 : "";
-    var thumbImage3 = typeof req.files.thumbImage3 !== "undefined" ? req.files.thumbImage3 : "";
-    var title = req.body.title;
+    var mainImage = typeof JSON.stringify(req.files.mainImage) !== "undefined" ? JSON.stringify(req.files.mainImage) : "";
+    var thumbImage1 = typeof JSON.stringify( req.files.thumbImage1) !== "undefined" ? JSON.stringify(req.files.thumbImage1) : "";
+    var thumbImage2 = typeof JSON.stringify( req.files.thumbImage2) !== "undefined" ? JSON.stringify(req.files.thumbImage2) : "";
+    var thumbImage3 = typeof JSON.stringify( req.files.thumbImage3) !== "undefined" ? JSON.stringify(req.files.thumbImage3) : "";
+     var title = req.body.title;
     var slug = title.replace(/\s+/g, '-').toLowerCase();
     var description = req.body.description;
     var category = req.body.category;
@@ -226,6 +227,14 @@ router.post("/edit-product/:id",function(req,res){
     var pimage3 = req.body.pimage3;
     var id = req.params.id;
     var productID = req.params.productID;
+
+    console.log(mainImage);
+    console.log(thumbImage1);
+     console.log("The thumb name is "+ JSON.stringify(req.files.thumbImage2.name));
+    console.log(pimage);
+    console.log(pimage1);
+    console.log(pimage2);
+    console.log(pimage3);
     
 
     Product.findOne({slug: slug, _id: {'$ne': id}}, function (err, p) {
@@ -238,40 +247,51 @@ router.post("/edit-product/:id",function(req,res){
             Product.findById(id, function(err,product){
                 if(err) console.log(err)
                 else{
-                    console.log(product);
+                    console.log("The product details are as folllows" + product);
                     product.productID= productID;
                     product.title = title;
                     product.slug = slug;
                     product.description = description;
                     product.category = category;
                     product.mainCategory = mainCategory;
-                    product.productID = productID;
-                    if (product.mainImage != "") {
-                        product.mainImage = mainImage;
+                    if (typeof req.files.mainImage == "undefined" || req.files.mainImage == "undefined" || req.files.mainImage == "") { 
+                        product.mainImage = product.mainImage
+                    }else{
+                        product.mainImage = req.files.mainImage.name;
                     }
-                    if (product.thumbImage1 != "") {
-                        product.thumbImage1 = thumbImage1;
+                    if (typeof req.files.thumbImage1 == "undefined" || req.files.thumbImage1 == "undefined" || req.files.thumbImage1 == "") {
+                        product.thumbImage1 = product.thumbImage1
+                    }else{
+                        product.thumbImage1 = req.files.thumbImage1.name;
                     }
-                    if (product.thumbImage2 != "") {
-                        product.thumbImage2 = thumbImage2;
+                    if (typeof req.files.thumbImage2 == "undefined" || req.files.thumbImage2 == "undefined" || req.files.thumbImage2 == "") {
+                        product.thumbImage2 = product.thumbImage2
+                    }else{
+                        product.thumbImage2 = req.files.thumbImage2.name;
                     }
-                    if (product.thumbImage3 != "") {
-                        product.thumbImage3 = thumbImage3;
+                    if (typeof req.files.thumbImage3 == "undefined" || req.files.thumbImage3 == "undefined" || req.files.thumbImage3 == "") {
+                        product.thumbImage3 = product.thumbImage3
+                    }else{
+                        product.thumbImage3 = req.files.thumbImage3.name;
                     }
-                    
 
+                    
                     product.save(function(err){
                         if(err) console.log(err)
 
                         //Main image edit
-                        if (mainImage != "") {
+                       // console.log("The details in main image are" + mainImage);
+                        if (typeof req.files.mainImage == "undefined" || req.files.mainImage == "undefined" || req.files.mainImage =="") {
+                            console.log("here")
+                        }
+                        else{
                             if (pimage != "") {
                                 fs.remove('public/product_images/' + id + '/' + pimage, function (err) {
                                     if (err)
                                     console.log(err);
                                 });
                             }
-
+                            
                             var productImage = req.files.mainImage;
                             var path = 'public/product_images/' + id + '/' + mainImage;
 
@@ -280,8 +300,11 @@ router.post("/edit-product/:id",function(req,res){
                             });
                         }
 
-                        // Thumbnail image 1
-                        if (thumbImage1 != "") {
+                        //Thumbnail image 1
+                        if (req.files.thumbImage1 == "" || typeof req.files.thumbImage1 == "undefined" ) {
+                            console.log("here 2")
+                        }
+                        else{
                             if (pimage1 != "") {
                                 fs.remove('public/product_images/' + id + '/' + thumbImage1, function (err) {
                                     if (err)
@@ -298,7 +321,10 @@ router.post("/edit-product/:id",function(req,res){
                         }
 
                         //Thumbnail image 2
-                        if (thumbImage2 != "") {
+                        if (req.files.thumbImage2 == "" || typeof req.files.thumbImage2 == "undefined" ) {
+                            console.log("here 3")
+                        }
+                        else{
                             if (pimage2 != "") {
                                 fs.remove('public/product_images/' + id + '/' + thumbImage2, function (err) {
                                     if (err)
@@ -307,7 +333,7 @@ router.post("/edit-product/:id",function(req,res){
                             }
 
                             var productImage2 = req.files.thumbImage2;
-                            var path2 = 'public/product_images/' + id + '/' + thumbImage2;
+                            var path2 = 'public/product_images/' + id + '/' + req.files.thumbImage2.name;
 
                             productImage2.mv(path2, function (err) {
                                 return console.log(err);
@@ -316,7 +342,10 @@ router.post("/edit-product/:id",function(req,res){
 
                         //Thumbnail images 3
 
-                        if (thumbImage3 != "") {
+                        if (req.files.thumbImage3 == "" || typeof req.files.thumbImage3 == "undefined" ) {
+                            console.log("here 4")
+                        }
+                        else{
                             if (pimage3 != "") {
                                 fs.remove('public/product_images/' + id + '/' + thumbImage3, function (err) {
                                     if (err)
@@ -509,27 +538,27 @@ router.get("/search",(req,res)=>{
     })
 });
 
-router.get('/:category', function (req, res) {
+// router.get('/:category', function (req, res) {
 
-    var categorySlug = req.params.category;
-    Product.countDocuments(function(err,c){
-        count=c;
-    });
+//     var categorySlug = req.params.category;
+//     Product.countDocuments(function(err,c){
+//         count=c;
+//     });
 
-    Category.findOne({slug: categorySlug}, function (err, c) {
-        Product.find({category: categorySlug}, function (err, products) {
-            if (err)
-                console.log(err);
+//     Category.findOne({slug: categorySlug}, function (err, c) {
+//         Product.find({category: categorySlug}, function (err, products) {
+//             if (err)
+//                 console.log(err);
 
-            res.render('admin/products', {
-                title: c.title,
-                products: products,
-                count:count
-            });
-        });
-    });
+//             res.render('admin/products', {
+//                 title: c.title,
+//                 products: products,
+//                 count:count
+//             });
+//         });
+//     });
 
-});
+// });
 
 //Exports
 module.exports = router;
